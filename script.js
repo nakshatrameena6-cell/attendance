@@ -1,11 +1,34 @@
-// ===== SUPABASE CONFIGURATION =====
-// Replace these with your actual Supabase credentials
-const SUPABASE_URL = 'https://cpmsxozovcinqrjelshk.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_7SiNof9mQOyo3S2RunPv5w_lLOQPdWI';
+console.log("SCRIPT JS LOADED");
 
-// Initialize Supabase client
-const { createClient } = window.supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Step 1 — Create Supabase client FIRST
+const SUPABASE_URL = "https://cpmsxozovcinqrjelshk.supabase.co";
+
+const SUPABASE_ANON_KEY = "sb_publishable_7SiNof9mQOyo3S2RunPv5w_lLOQPdWI";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+// Step 2 — Create function
+async function testConnection() {
+
+  const { data, error } = await supabase
+    .from('students')
+    .select('*');
+
+  if (error) {
+    console.log("Error:", error);
+  } else {
+    console.log("Students:", data);
+  }
+
+}
+
+
+// Step 3 — Call function LAST
+testConnection();
 
 // ===== STATE MANAGEMENT =====
 let state = {
