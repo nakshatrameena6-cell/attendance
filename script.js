@@ -572,6 +572,50 @@ async function loadAttendanceHistory() {
 
     showLoading(false);
 }
+// Load students button click
+document.getElementById("fetch-students-btn")
+.addEventListener("click", loadStudents);
+
+async function loadStudents() {
+
+  const container = document.getElementById("checkboxes-container");
+
+  container.innerHTML = "Loading students...";
+
+  const { data, error } = await supabase
+    .from('students')
+    .select('*');
+
+  if (error) {
+
+    container.innerHTML = "Error loading students";
+
+    console.log(error);
+
+    return;
+
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(student => {
+
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" value="${student.id}" checked>
+        ${student.name} (${student.roll_no})
+      </label>
+    `;
+
+    container.appendChild(div);
+
+  });
+
+  document.getElementById("students-list").style.display = "block";
+
+}
 
 // ===== AUTO-LOAD STUDENTS ON PAGE LOAD (OPTIONAL) =====
 // Uncomment the line below to auto-load students when the page loads
