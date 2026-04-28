@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-clipboard-check"></i> Attendance Tracker</h1>
+                <p>Efficient Attendance Management System</p>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-btn active" data-tab="dashboard">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </button>
+            <button class="nav-btn" data-tab="mark-attendance">
+                <i class="fas fa-check-square"></i> Mark Attendance
+            </button>
+            <button class="nav-btn" data-tab="view-absentees">
+                <i class="fas fa-user-slash"></i> View Absentees
+            </button>
+            <button class="nav-btn" data-tab="history">
+                <i class="fas fa-history"></i> History
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Alert Messages -->
+            <div id="alert" class="alert"></div>
+
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <div class="dashboard-header">
+                    <h2>Dashboard Overview</h2>
+                    <button id="refreshDashboard" class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon total">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Students</p>
+                            <p class="stat-value" id="totalStudents">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon present">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Present Today</p>
+                            <p class="stat-value" id="totalPresent">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon absent">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Absent Today</p>
+                            <p class="stat-value" id="totalAbsent">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon percentage">
+                            <i class="fas fa-percent"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Attendance %</p>
+                            <p class="stat-value" id="attendancePercentage">0%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Date Display -->
+                <div class="date-display">
+                    <h3>Today's Date: <span id="todayDate"></span></h3>
+                </div>
+            </section>
+
+            <!-- Mark Attendance Tab -->
+            <section id="mark-attendance" class="tab-content">
+                <div class="form-container">
+                    <h2>Mark Attendance</h2>
+
+                    <div class="form-group">
+                        <label for="attendanceDate">Select Date:</label>
+                        <input type="date" id="attendanceDate" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="periodSelect">Select Period:</label>
+                        <select id="periodSelect" class="form-control">
+                            <option value="">-- Choose Period --</option>
+                            <option value="1">Period 1 (9:00 - 9:45)</option>
+                            <option value="2">Period 2 (9:45 - 10:30)</option>
+                            <option value="3">Period 3 (10:30 - 11:15)</option>
+                            <option value="4">Period 4 (11:15 - 12:00)</option>
+                            <option value="5">Period 5 (12:00 - 12:45)</option>
+                            <option value="6">Period 6 (1:00 - 1:45 PM)</option>
+                            <option value="7">Period 7 (1:45 - 2:30 PM)</option>
+                            <option value="8">Period 8 (2:30 - 3:15 PM)</option>
+                            <option value="9">Period 9 (3:15 - 4:00 PM)</option>
+                        </select>
+                    </div>
+
+                    <button id="loadStudentsBtn" class="btn-primary">
+                        <i class="fas fa-download"></i> Load Students
+                    </button>
+
+                    <!-- Students List -->
+                    <div id="studentsContainer" class="students-container" style="display: none;">
+                        <h3>Mark Students Present/Absent</h3>
+                        <div class="select-all-group">
+                            <label>
+                                <input type="checkbox" id="selectAllCheckbox">
+                                <span>Select All Present</span>
+                            </label>
+                        </div>
+
+                        <div id="studentsList" class="students-list">
+                            <!-- Students will be loaded here -->
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="saveAttendanceBtn" class="btn-success">
+                                <i class="fas fa-save"></i> Save Attendance
+                            </button>
+                            <button id="cancelAttendanceBtn" class="btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View Absentees Tab -->
+            <section id="view-absentees" class="tab-content">
+                <div class="absentees-container">
+                    <h2>View Absentees</h2>
+
+                    <div class="form-group">
+                        <label for="absenteeDate">Select Date:</label>
+                        <input type="date" id="absenteeDate" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="absenteePeriod">Select Period:</label>
+                        <select id="absenteePeriod" class="form-control">
+                            <option value="">-- Choose Period --</option>
+                            <option value="1">Period 1 (9:00 - 9:45)</option>
+                            <option value="2">Period 2 (9:45 - 10:30)</option>
+                            <option value="3">Period 3 (10:30 - 11:15)</option>
+                            <option value="4">Period 4 (11:15 - 12:00)</option>
+                            <option value="5">Period 5 (12:00 - 12:45)</option>
+                            <option value="6">Period 6 (1:00 - 1:45 PM)</option>
+                            <option value="7">Period 7 (1:45 - 2:30 PM)</option>
+                            <option value="8">Period 8 (2:30 - 3:15 PM)</option>
+                            <option value="9">Period 9 (3:15 - 4:00 PM)</option>
+                        </select>
+                    </div>
+
+                    <button id="viewAbsenteesBtn" class="btn-primary">
+                        <i class="fas fa-search"></i> View Absentees
+                    </button>
+
+                    <!-- Absentees List Display -->
+                    <div id="absenteesDisplay" style="display: none;">
+                        <div class="absentees-stats">
+                            <p>Total Absentees: <span id="absenteeCount" class="highlight-red">0</span></p>
+                        </div>
+
+                        <div id="absenteesList" class="absentees-list">
+                            <!-- Absentees will be listed here -->
+                        </div>
+
+                        <button id="copyAbsenteesBtn" class="btn-info">
+                            <i class="fas fa-copy"></i> Copy Absentees List
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Tab -->
+            <section id="history" class="tab-content">
+                <div class="history-container">
+                    <h2>Attendance History</h2>
+
+                    <div class="history-filters">
+                        <div class="form-group">
+                            <label for="historyDate">Select Date:</label>
+                            <input type="date" id="historyDate" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="historyPeriod">Select Period:</label>
+                            <select id="historyPeriod" class="form-control">
+                                <option value="">-- Choose Period --</option>
+                                <option value="1">Period 1 (9:00 - 9:45)</option>
+                                <option value="2">Period 2 (9:45 - 10:30)</option>
+                                <option value="3">Period 3 (10:30 - 11:15)</option>
+                                <option value="4">Period 4 (11:15 - 12:00)</option>
+                                <option value="5">Period 5 (12:00 - 12:45)</option>
+                                <option value="6">Period 6 (1:00 - 1:45 PM)</option>
+                                <option value="7">Period 7 (1:45 - 2:30 PM)</option>
+                                <option value="8">Period 8 (2:30 - 3:15 PM)</option>
+                                <option value="9">Period 9 (3:15 - 4:00 PM)</option>
+                            </select>
+                        </div>
+
+                        <button id="loadHistoryBtn" class="btn-primary">
+                            <i class="fas fa-search"></i> View History
+                        </button>
+                    </div>
+
+                    <!-- History Display -->
+                    <div id="historyDisplay" style="display: none;">
+                        <div class="history-stats">
+                            <p>Total Students: <span id="historyTotalStudents">0</span></p>
+                            <p>Present: <span id="historyPresentCount" class="highlight-green">0</span></p>
+                            <p>Absent: <span id="historyAbsentCount" class="highlight-red">0</span></p>
+                        </div>
+
+                        <div class="history-lists">
+                            <div class="history-list-section">
+                                <h3><i class="fas fa-check-circle" style="color: #4caf50;"></i> Present Students</h3>
+                                <ul id="historyPresentList" class="history-list">
+                                    <!-- Present students will be listed here -->
+                                </ul>
+                            </div>
+
+                            <div class="history-list-section">
+                                <h3><i class="fas fa-times-circle" style="color: #f44336;"></i> Absent Students</h3>
+                                <ul id="historyAbsentList" class="history-list">
+                                    <!-- Absent students will be listed here -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Supabase JS Library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4"></script>
+    <script src="script.js"></script>
+</body>
+</html>
