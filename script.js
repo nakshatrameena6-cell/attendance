@@ -129,15 +129,15 @@ function setTodayDate() {
  */
 function formatPeriod(period) {
     const periods = {
-        1: 'Period 1 (9:00 - 9:45)',
-        2: 'Period 2 (9:45 - 10:30)',
-        3: 'Period 3 (10:30 - 11:15)',
-        4: 'Period 4 (11:15 - 12:00)',
-        5: 'Period 5 (12:00 - 12:45)',
-        6: 'Period 6 (1:00 - 1:45 PM)',
-        7: 'Period 7 (1:45 - 2:30 PM)',
-        8: 'Period 8 (2:30 - 3:15 PM)',
-        9: 'Period 9 (3:15 - 4:00 PM)',
+        1: 'Period 1 (8:30 - 9:15)',
+        2: 'Period 2 (9:15 - 10:00)',
+        3: 'Period 3 (10:15 - 11:00)',
+        4: 'Period 4 (11:00 - 11:45)',
+        5: 'Period 5 (11:45 - 12:30)',
+        6: 'Period 6 (1:15 - 2:00 PM)',
+        7: 'Period 7 (2:00 - 2:45 PM)',
+        8: 'Period 8 (3:00 - 3:45 PM)',
+        9: 'Period 9 (3:45 - 4:30 PM)',
     };
     return periods[period] || `Period ${period}`;
 }
