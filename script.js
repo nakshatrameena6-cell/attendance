@@ -287,6 +287,9 @@ async function loadDashboard() {
     document.getElementById('attendancePercentage').textContent = stats.percentage + '%';
 
     showLoading(false);
+    
+    // Start the live animated chart
+    initializeAnimatedChart(stats);
 }
 
 // ===== MARK ATTENDANCE SECTION =====
@@ -573,8 +576,10 @@ async function loadAttendanceHistory() {
     showLoading(false);
 }
 // Load students button click
-document.getElementById("fetch-students-btn")
-.addEventListener("click", loadStudents);
+const fetchStudentsBtn = document.getElementById("fetch-students-btn");
+if (fetchStudentsBtn) {
+    fetchStudentsBtn.addEventListener("click", loadStudents);
+}
 
 async function loadStudents() {
 
@@ -615,6 +620,223 @@ async function loadStudents() {
 
   document.getElementById("students-list").style.display = "block";
 
+}
+
+// ===== LIVE ANIMATED CHART SECTION =====
+
+let chartAnimationInterval = null;
+let presentTrend = [];
+let absentTrend = [];
+let chartDataPoints = [];
+
+/**
+ * Initialize and animate the chart with live data
+ */
+function initializeAnimatedChart(stats) {
+    const canvas = document.getElementById('attendanceChart');
+    if (!canvas) {
+        console.warn('Chart canvas not found');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.warn('Could not get canvas context');
+        return;
+    }
+    
+    // Initialize data arrays with starting values
+    presentTrend = [stats.presentCount];
+    absentTrend = [stats.absentCount];
+    chartDataPoints = [0];
+    
+    // Clear any existing animation
+    if (chartAnimationInterval) clearInterval(chartAnimationInterval);
+    
+    // Animate chart every 2 seconds
+    chartAnimationInterval = setInterval(() => {
+        // Add random data to simulate live updates (slight variations)
+        const newPresent = Math.max(0, Math.min(stats.totalStudents, stats.presentCount + Math.floor(Math.random() * 3) - 1));
+        const newAbsent = stats.totalStudents - newPresent;
+        
+        presentTrend.push(newPresent);
+        absentTrend.push(newAbsent);
+        chartDataPoints.push(chartDataPoints.length);
+        
+        // Keep only last 12 data points for smoother animation
+        if (presentTrend.length > 12) {
+            presentTrend.shift();
+            absentTrend.shift();
+            chartDataPoints.shift();
+        }
+        
+        // Redraw chart
+        drawAnimatedChart(ctx, canvas, presentTrend, absentTrend, stats.totalStudents);
+    }, 2000);
+    
+    // Draw initial chart
+    drawAnimatedChart(ctx, canvas, presentTrend, absentTrend, stats.totalStudents);
+}
+
+/**
+ * Draw the animated chart using canvas
+ */
+function drawAnimatedChart(ctx, canvas, presentData, absentData, total) {
+    if (!ctx || !canvas) return;
+    
+    // Set canvas size
+    canvas.width = canvas.offsetWidth || 500;
+    canvas.height = 250;
+    
+    const padding = 40;
+    const width = canvas.width - 2 * padding;
+    const height = canvas.height - 2 * padding;
+    
+    // Clear canvas with gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, 'rgba(240, 249, 255, 0.5)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw grid lines
+    ctx.strokeStyle = 'rgba(200, 200, 200, 0.2)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 5; i++) {
+        const y = padding + (height / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(canvas.width - padding, y);
+        ctx.stroke();
+    }
+    
+    // Draw axes
+    ctx.strokeStyle = 'rgba(99, 102, 241, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+    
+    // Draw labels
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '12px Segoe UI';
+    ctx.textAlign = 'center';
+    for (let i = 0; i < presentData.length; i++) {
+        const x = padding + (width / (presentData.length - 1 || 1)) * i;
+        ctx.fillText(i, x, canvas.height - padding + 20);
+    }
+    
+    // Draw Y-axis labels
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i <= 5; i++) {
+        const value = Math.round((total / 5) * i);
+        const y = canvas.height - padding - (height / 5) * i;
+        ctx.fillText(value, padding - 10, y);
+    }
+    
+    // Draw Present line (vibrant green gradient)
+    if (presentData.length > 1) {
+        const presentGradient = ctx.createLinearGradient(0, padding, 0, canvas.height - padding);
+        presentGradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+        presentGradient.addColorStop(1, 'rgba(16, 185, 129, 0.1)');
+        
+        ctx.fillStyle = presentGradient;
+        ctx.beginPath();
+        ctx.moveTo(padding, canvas.height - padding);
+        
+        for (let i = 0; i < presentData.length; i++) {
+            const x = padding + (width / (presentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (presentData[i] / total) * height;
+            ctx.lineTo(x, y);
+        }
+        
+        ctx.lineTo(canvas.width - padding, canvas.height - padding);
+        ctx.fill();
+        
+        // Draw line
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        for (let i = 0; i < presentData.length; i++) {
+            const x = padding + (width / (presentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (presentData[i] / total) * height;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        
+        // Draw points
+        ctx.fillStyle = '#10b981';
+        for (let i = 0; i < presentData.length; i++) {
+            const x = padding + (width / (presentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (presentData[i] / total) * height;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    // Draw Absent line (vibrant red gradient)
+    if (absentData.length > 1) {
+        const absentGradient = ctx.createLinearGradient(0, padding, 0, canvas.height - padding);
+        absentGradient.addColorStop(0, 'rgba(239, 68, 68, 0.4)');
+        absentGradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+        
+        ctx.fillStyle = absentGradient;
+        ctx.beginPath();
+        ctx.moveTo(padding, canvas.height - padding);
+        
+        for (let i = 0; i < absentData.length; i++) {
+            const x = padding + (width / (absentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (absentData[i] / total) * height;
+            ctx.lineTo(x, y);
+        }
+        
+        ctx.lineTo(canvas.width - padding, canvas.height - padding);
+        ctx.fill();
+        
+        // Draw line
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        for (let i = 0; i < absentData.length; i++) {
+            const x = padding + (width / (absentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (absentData[i] / total) * height;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        
+        // Draw points
+        ctx.fillStyle = '#ef4444';
+        for (let i = 0; i < absentData.length; i++) {
+            const x = padding + (width / (absentData.length - 1 || 1)) * i;
+            const y = canvas.height - padding - (absentData[i] / total) * height;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    // Draw legend
+    const legendY = 10;
+    ctx.font = '13px Segoe UI';
+    ctx.textAlign = 'left';
+    
+    // Legend for Present
+    ctx.fillStyle = '#10b981';
+    ctx.fillRect(canvas.width - 200, legendY, 12, 12);
+    ctx.fillStyle = '#1f2937';
+    ctx.fillText('Present', canvas.width - 180, legendY + 10);
+    
+    // Legend for Absent
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(canvas.width - 200, legendY + 25, 12, 12);
+    ctx.fillStyle = '#1f2937';
+    ctx.fillText('Absent', canvas.width - 180, legendY + 35);
 }
 
 // ===== AUTO-LOAD STUDENTS ON PAGE LOAD (OPTIONAL) =====
