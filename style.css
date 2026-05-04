@@ -12,10 +12,10 @@
     --border-color: #e0e7ff;
     --shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
     --shadow-hover: 0 8px 25px rgba(99, 102, 241, 0.2);
-    --green: #10b981;
-    --red: #ef4444;
-    --yellow: #e9db18;
-    --blue: #3b82f6;
+    --green: #70ccad;
+    --red: #db8d8d;
+    --yellow: #f1eca4;
+    --blue: #81a9e9;
     --purple: #a855f7;
     --pink: #ec4899;
     --cyan: #06b6d4;
@@ -278,22 +278,22 @@ body {
 }
 
 .stat-icon.total {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #81a9e9 0%, #81a9e9 100%);
     animation: pulse 2s ease-in-out infinite;
 }
 
 .stat-icon.present {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #77ccad 0%, #70ccad 100%);
     animation: pulse 2.2s ease-in-out infinite;
 }
 
 .stat-icon.absent {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, #db8d8d 0%, #db8d8d 100%);
     animation: pulse 2.4s ease-in-out infinite;
 }
 
 .stat-icon.percentage {
-    background: linear-gradient(135deg, #f7e70e 0%, #f7e70e 100%);
+    background: linear-gradient(135deg, #f1eca4 0%, #f1eca4 100%);
     animation: pulse 2.6s ease-in-out infinite;
 }
 
