@@ -996,3 +996,188 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+/* ===== CALENDAR STYLES (Pastel Theme) ===== */
+.calendar-container {
+    background: #fffafa; /* very light pinkish white */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    max-width: 700px;
+    margin: 0 auto;
+    border: 2px solid #ffdfba;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pastel-text {
+    color: #ffb3ba;
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.calendar-header button {
+    background: #ffffff;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+}
+
+.calendar-header button:hover {
+    background: #ffffff;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    color: #b3f0ff;
+    margin-bottom: 10px;
+}
+
+.day-name {
+    padding: 10px 0;
+    background: #9c71e2;
+    border-radius: 8px;
+    margin: 2px;
+}
+
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-date {
+    background: #ddbff1;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0f8e0;
+}
+
+.calendar-date:hover {
+    transform: scale(1.05);
+    background: #c1a3f3;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.calendar-date.other-month {
+    background: #f0f0f0;
+    color: #ccc;
+    cursor: default;
+    border: none;
+}
+
+.calendar-date.other-month:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.calendar-date.today {
+    background: #ffb3ba;
+    color: white;
+    font-weight: bold;
+}
+
+.note-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ec4899;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+/* ===== MODAL STYLES ===== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content.pastel-theme {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    border: 3px solid #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 179, 186, 0.3);
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-header {
+    background: #f5b3f5;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #ffa6d3;
+}
+
+.modal-body {
+    padding: 20px;
+    background: #c7b3f5; /* Light yellow background for notes body */
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background: #bae1ff;
+    text-align: right;
+}
+
+#noteTextarea {
+    width: 100%;
+    border: 2px solid #aeaff3;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: inherit;
+    resize: vertical;
+    background: white;
+}
+
+#noteTextarea:focus {
+    outline: none;
+    border-color: #ffffff;
+}

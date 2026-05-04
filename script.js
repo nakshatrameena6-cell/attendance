@@ -79,6 +79,13 @@ function setupEventListeners() {
 
     // History
     document.getElementById('loadHistoryBtn').addEventListener('click', loadAttendanceHistory);
+
+    // Calendar
+    document.getElementById('prevMonth').addEventListener('click', () => changeMonth(-1));
+    document.getElementById('nextMonth').addEventListener('click', () => changeMonth(1));
+    document.getElementById('closeModalBtn').addEventListener('click', closeNoteModal);
+    document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
+    initCalendar();
 }
 
 // ===== TAB NAVIGATION =====
@@ -624,3 +631,101 @@ async function loadStudents() {
 // ===== AUTO-LOAD STUDENTS ON PAGE LOAD (OPTIONAL) =====
 // Uncomment the line below to auto-load students when the page loads
 // fetchAllStudents();
+
+// ===== CALENDAR & NOTES SECTION =====
+
+let currentCalendarDate = new Date();
+let selectedNoteDate = null;
+
+function initCalendar() {
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const year = currentCalendarDate.getFullYear();
+    const month = currentCalendarDate.getMonth();
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    document.getElementById('monthYearDisplay').textContent = `${monthNames[month]} ${year}`;
+
+    const calendarDates = document.getElementById('calendarDates');
+    calendarDates.innerHTML = '';
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    // Previous month's trailing days
+    for (let i = firstDay; i > 0; i--) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-date other-month';
+        dayDiv.textContent = daysInPrevMonth - i + 1;
+        calendarDates.appendChild(dayDiv);
+    }
+
+    const today = new Date();
+
+    // Current month's days
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-date';
+        
+        const dateNumber = document.createElement('div');
+        dateNumber.textContent = i;
+        dayDiv.appendChild(dateNumber);
+        
+        // Date formatting for localStorage key: YYYY-MM-DD
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        
+        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            dayDiv.classList.add('today');
+        }
+
+        const note = localStorage.getItem(`note-${dateString}`);
+        if (note) {
+            const indicator = document.createElement('div');
+            indicator.className = 'note-indicator';
+            dayDiv.appendChild(indicator);
+        }
+
+        dayDiv.addEventListener('click', () => openNoteModal(dateString));
+
+        calendarDates.appendChild(dayDiv);
+    }
+}
+
+function changeMonth(direction) {
+    currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+    renderCalendar();
+}
+
+function openNoteModal(dateString) {
+    selectedNoteDate = dateString;
+    document.getElementById('modalDateTitle').textContent = `Notes for ${dateString}`;
+    
+    const existingNote = localStorage.getItem(`note-${dateString}`);
+    document.getElementById('noteTextarea').value = existingNote ? existingNote : '';
+    
+    document.getElementById('notesModal').style.display = 'flex';
+}
+
+function closeNoteModal() {
+    document.getElementById('notesModal').style.display = 'none';
+    selectedNoteDate = null;
+}
+
+function saveNote() {
+    if (!selectedNoteDate) return;
+    
+    const noteText = document.getElementById('noteTextarea').value.trim();
+    if (noteText) {
+        localStorage.setItem(`note-${selectedNoteDate}`, noteText);
+        showAlert('Note saved successfully!', 'success');
+    } else {
+        localStorage.removeItem(`note-${selectedNoteDate}`);
+        showAlert('Note cleared.', 'info');
+    }
+    
+    closeNoteModal();
+    renderCalendar(); // Re-render to show/hide indicators
+}

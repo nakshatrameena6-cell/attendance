@@ -31,6 +31,9 @@
             <button class="nav-btn" data-tab="history">
                 <i class="fas fa-history"></i> History
             </button>
+            <button class="nav-btn" data-tab="calendar-tab">
+                <i class="fas fa-calendar-alt"></i> Calendar
+            </button>
         </nav>
 
         <!-- Main Content -->
@@ -257,12 +260,51 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Calendar Tab -->
+            <section id="calendar-tab" class="tab-content">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="btn-secondary"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="monthYearDisplay" class="pastel-text">Month Year</h2>
+                        <button id="nextMonth" class="btn-secondary"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-name">Sun</div>
+                        <div class="day-name">Mon</div>
+                        <div class="day-name">Tue</div>
+                        <div class="day-name">Wed</div>
+                        <div class="day-name">Thu</div>
+                        <div class="day-name">Fri</div>
+                        <div class="day-name">Sat</div>
+                    </div>
+                    <div id="calendarDates" class="calendar-dates">
+                        <!-- Dates will be generated via JS -->
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Loading Indicator -->
         <div id="loadingIndicator" class="loading-indicator" style="display: none;">
             <div class="spinner"></div>
             <p>Loading...</p>
+        </div>
+
+        <!-- Notes Modal -->
+        <div id="notesModal" class="modal" style="display: none;">
+            <div class="modal-content pastel-theme">
+                <div class="modal-header">
+                    <h3 id="modalDateTitle">Notes for Date</h3>
+                    <button id="closeModalBtn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="noteTextarea" placeholder="Write your notes or reminders here..." rows="5" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveNoteBtn" class="btn-primary">Save Note</button>
+                </div>
+            </div>
         </div>
     </div>
 
