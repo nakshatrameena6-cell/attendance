@@ -35,7 +35,7 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #c2e3fa 0%, #f8b6e8 25%, #fab8dd 50%, #a7d5f3 100%);
+    background: linear-gradient(135deg, #c2e3fa 0%, #ffc9f1 25%, #ebaacf 50%, #a7d5f3 100%);
     color: var(--text-dark);
     line-height: 1.6;
     min-height: 100vh;
