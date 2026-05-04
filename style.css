@@ -57,7 +57,7 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-    background: linear-gradient(135deg, #6366f1 0%, #3b82f6 25%, #06b6d4 50%, #10b981 75%, #ec4899 100%);
+    background: linear-gradient(135deg, #6e40eb 0%, #5a57ee 25%, #b24aee 50%, #de6ff5 75%, #48cbec 100%);
     background-size: 200% 200%;
     animation: headerGradient 8s ease infinite;
     color: white;
@@ -342,7 +342,7 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #6366f1, #3b82f6, #06b6d4, #10b981, #ec4899);\n    animation: shimmer 3s ease-in-out infinite;
+    background: linear-gradient(90deg, #5052ec, #3b76f6, #a04af1, #e18af3, #52b9e9);\n    animation: shimmer 3s ease-in-out infinite;
 }
 
 @keyframes shimmer {
