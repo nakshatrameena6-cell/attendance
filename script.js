@@ -86,6 +86,12 @@ function setupEventListeners() {
     document.getElementById('closeModalBtn').addEventListener('click', closeNoteModal);
     document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
     initCalendar();
+
+    // Students Directory
+    const refreshStudentsBtn = document.getElementById('refreshStudentsBtn');
+    if (refreshStudentsBtn) {
+        refreshStudentsBtn.addEventListener('click', loadStudentsDirectory);
+    }
 }
 
 // ===== TAB NAVIGATION =====
@@ -99,6 +105,10 @@ function switchTab(e) {
     // Add active class to clicked button and corresponding content
     e.currentTarget.classList.add('active');
     document.getElementById(targetTab).classList.add('active');
+    
+    if (targetTab === 'students-list-tab') {
+        loadStudentsDirectory();
+    }
 }
 
 // ===== UTILITY FUNCTIONS =====
@@ -627,6 +637,38 @@ async function loadStudents() {
 }
 
 
+
+// ===== STUDENTS DIRECTORY SECTION =====
+
+async function loadStudentsDirectory() {
+    showLoading(true);
+    const students = await fetchAllStudents();
+    
+    document.getElementById('directoryTotalCount').textContent = students.length;
+    
+    const listContainer = document.getElementById('fullStudentsList');
+    listContainer.innerHTML = '';
+    
+    if (students.length === 0) {
+        listContainer.innerHTML = '<div class="empty-message">No students found in the database.</div>';
+    } else {
+        students.forEach(student => {
+            const studentEl = document.createElement('div');
+            studentEl.className = 'student-item';
+            studentEl.innerHTML = `
+                <div style="font-size: 1.5rem; color: var(--primary-color); margin-right: 15px;">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-info">
+                    <div class="student-name" style="font-size: 1.1rem;">${student.name}</div>
+                    <div class="student-roll" style="color: #666;">Roll No: ${student.roll_no}</div>
+                </div>
+            `;
+            listContainer.appendChild(studentEl);
+        });
+    }
+    showLoading(false);
+}
 
 // ===== AUTO-LOAD STUDENTS ON PAGE LOAD (OPTIONAL) =====
 // Uncomment the line below to auto-load students when the page loads
