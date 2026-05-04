@@ -328,10 +328,12 @@ body {
 /* ===== CHART CONTAINER ===== */
 .chart-container {
     background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-    border: 2px solid var(--border-color);\n    border-radius: 15px;
+    border: 2px solid var(--border-color);
+       border-radius: 15px;
     padding: 30px;
     margin-bottom: 30px;
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);\n    position: relative;
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+     position: relative;
     overflow: hidden;
 }
 
@@ -342,7 +344,8 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #5052ec, #3b76f6, #a04af1, #e18af3, #52b9e9);\n    animation: shimmer 3s ease-in-out infinite;
+    background: linear-gradient(90deg, #5052ec, #3b76f6, #a04af1, #e18af3, #52b9e9);
+       animation: shimmer 3s ease-in-out infinite;
 }
 
 @keyframes shimmer {
