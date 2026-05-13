@@ -13,7 +13,7 @@
         <header class="header">
             <div class="header-content">
                 <h1><i class="fas fa-clipboard-check"></i> Attendance Tracker</h1>
-                <p>Efficient Attendance Management System</p>
+                <p> Attendance Management System</p>
             </div>
         </header>
 
@@ -30,6 +30,12 @@
             </button>
             <button class="nav-btn" data-tab="history">
                 <i class="fas fa-history"></i> History
+            </button>
+            <button class="nav-btn" data-tab="calendar-tab">
+                <i class="fas fa-calendar-alt"></i> Calendar
+            </button>
+            <button class="nav-btn" data-tab="students-list-tab">
+                <i class="fas fa-list"></i> Students List
             </button>
         </nav>
 
@@ -89,12 +95,6 @@
                     </div>
                 </div>
 
-                <!-- Live Animated Chart -->
-                <div class="chart-container">
-                    <h3><i class="fas fa-chart-line"></i> Attendance Trend (Live)</h3>
-                    <canvas id="attendanceChart" width="400" height="200"></canvas>
-                    <p class="chart-info">📈 Chart updates every 2 seconds with live attendance data</p>
-                </div>
 
                 <!-- Today's Date Display -->
                 <div class="date-display">
@@ -263,12 +263,71 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Students List Tab -->
+            <section id="students-list-tab" class="tab-content">
+                <div class="form-container">
+                    <h2><i class="fas fa-address-book"></i> Students Directory</h2>
+                    <div class="directory-actions" style="margin-bottom: 20px;">
+                        <button id="refreshStudentsBtn" class="btn-primary">
+                            <i class="fas fa-sync"></i> Refresh List
+                        </button>
+                    </div>
+                    <div class="directory-stats" style="margin-bottom: 15px; font-size: 1.1rem; font-weight: bold; color: var(--primary-color);">
+                        Total Enrolled: <span id="directoryTotalCount">0</span>
+                    </div>
+                    <div class="students-list" style="max-height: 500px; display: block;">
+                        <div id="fullStudentsList">
+                            <!-- Students will be generated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Tab -->
+            <section id="calendar-tab" class="tab-content">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="btn-secondary"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="monthYearDisplay" class="pastel-text">Month Year</h2>
+                        <button id="nextMonth" class="btn-secondary"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-name">Sun</div>
+                        <div class="day-name">Mon</div>
+                        <div class="day-name">Tue</div>
+                        <div class="day-name">Wed</div>
+                        <div class="day-name">Thu</div>
+                        <div class="day-name">Fri</div>
+                        <div class="day-name">Sat</div>
+                    </div>
+                    <div id="calendarDates" class="calendar-dates">
+                        <!-- Dates will be generated via JS -->
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Loading Indicator -->
         <div id="loadingIndicator" class="loading-indicator" style="display: none;">
             <div class="spinner"></div>
             <p>Loading...</p>
+        </div>
+
+        <!-- Notes Modal -->
+        <div id="notesModal" class="modal" style="display: none;">
+            <div class="modal-content pastel-theme">
+                <div class="modal-header">
+                    <h3 id="modalDateTitle">Notes for Date</h3>
+                    <button id="closeModalBtn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="noteTextarea" placeholder="Write your notes or reminders here..." rows="5" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveNoteBtn" class="btn-primary">Save Note</button>
+                </div>
+            </div>
         </div>
     </div>
 
