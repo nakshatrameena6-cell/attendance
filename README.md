@@ -109,54 +109,6 @@ Then navigate to `http://localhost:8000` 🎉
 
 ---
 
-## 🗄 Database Setup
-
-### Schema
-
-**`students`** table:
-
-```sql
-CREATE TABLE students (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  roll_no TEXT NOT NULL UNIQUE,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-**`attendance`** table:
-
-```sql
-CREATE TABLE attendance (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-  date DATE NOT NULL,
-  period INTEGER NOT NULL CHECK (period >= 1 AND period <= 9),
-  status TEXT NOT NULL CHECK (status IN ('present', 'absent')),
-  created_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE(student_id, date, period)
-);
-```
-
-### Sample Data
-
-```sql
-INSERT INTO students (name, roll_no) VALUES
-('Aarav Kumar', '001'),
-('Bhavna Singh', '002'),
-('Chirag Patel', '003'),
-('Divya Sharma', '004'),
-('Esha Gupta', '005'),
-('Faisal Khan', '006'),
-('Gitika Verma', '007'),
-('Harsh Jain', '008'),
-('Ishita Reddy', '009'),
-('Jai Kapoor', '010');
-```
-
-> **Tip:** You can also run the complete [`supabase-setup.sql`](supabase-setup.sql) file which includes tables, indexes, and sample data all in one go.
-
----
 
 ## 📁 Project Structure
 
